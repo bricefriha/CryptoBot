@@ -1,1 +1,3 @@
-console.log('Hello there!');
+import test from './testclass';
+
+console.log(test.sayHello());
