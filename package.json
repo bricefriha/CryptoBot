@@ -9,8 +9,12 @@
   "author": "Brice Friha",
   "license": "ISC",
   "dependencies": {
+    "node-fetch": "^2.6.6",
     "save-dev": "^0.0.1-security",
     "ts-node": "^10.4.0",
     "tslint": "^6.1.3"
+  },
+  "devDependencies": {
+    "@types/node-fetch": "^2.5.12"
   }
 }
