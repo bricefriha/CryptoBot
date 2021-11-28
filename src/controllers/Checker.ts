@@ -55,59 +55,42 @@ export default class Checker {
       // 'SHIBE',
       // 'LUNA'
     ];
-    this._arrayTok = "?ids=";
-
-    for (const token of this._tokens) {
-      this._arrayTok += `${token.id}`;
-
-      // if this is not the last token of the list
-      if (this._tokens.pop() != token) this._arrayTok += `%2`;
-    }
   }
   /**
    * Run
    */
   public Run() {
+    console.log(this._tokens);
     // Loop symbols
     for (let token of this.Tokens) {
-      interface IDictionary {
-        [index: string]: number;
-      }
-      let prices = {} as IDictionary;
-      // get current of each token
-      fetch(
-        `https://api.coingecko.com/api/v3/simple/price${this._arrayTok}%2C&vs_currencies=usd`
-      ).then(async (res) => {
-        const body = await res.json();
-        prices = body;
-      });
       // Get the information about them#
 
       // get highest value within the last 7 days
       fetch(
         `https://api.coingecko.com/api/v3/coins/${token.id}/market_chart?vs_currency=usd&days=7`
       ).then(async (res) => {
-        const body = await res.json();
-        // get the hisghest value
-        // var maxObj = body.reduce(function (max: number, obj: Array<number>) {
-        //   let current = obj[1];
-        //   return current > max ? current : max;
-        // });
-        let allPrices: number[] = [];
-        for (const key of body.prices) {
-          allPrices.push(key[1]);
-        }
+        await res.json().then((body) => {
+          // get the hisghest value
+          // var maxObj = body.reduce(function (max: number, obj: Array<number>) {
+          //   let current = obj[1];
+          //   return current > max ? current : max;
+          // });
+          let allPrices: number[] = [];
+          for (const key of body.prices) {
+            allPrices.push(key[1]);
+          }
 
-        let maxObj = allPrices.reduce(function (
-          accumulatedValue: number,
-          currentValue: number
-        ) {
-          return Math.max(accumulatedValue, currentValue);
+          let maxObj = allPrices.reduce(function (
+            accumulatedValue: number,
+            currentValue: number
+          ) {
+            return Math.max(accumulatedValue, currentValue);
+          });
+          console.log("--------------");
+          console.log(token.name);
+          console.log(`max: ${maxObj}`);
+          console.log(`current: ${allPrices[allPrices.length - 1]}`);
         });
-        console.log("--------------");
-        console.log(token.name);
-        console.log(`max: ${maxObj}`);
-        console.log(`current: ${allPrices[allPrices.length - 1]}`);
       });
     }
   }
