@@ -77,15 +77,17 @@ export default class Checker {
           });
 
           let currPrice = allPrices[allPrices.length - 1];
-          let percentDown = (((maxObj - currPrice) / maxObj) * 100).toFixed(2);
+          let percentDown = ((maxObj - currPrice) / maxObj) * 100;
 
           console.log("--------------");
           console.log(token.name);
           console.log(`max: ${maxObj}`);
           console.log(`current: ${currPrice}`);
-          console.log(`down: ${percentDown}%`);
+          console.log(`Down: ${percentDown.toFixed(2)}`);
+          console.log(`Good buy: ${percentDown > 40}`);
         });
       });
     }
+    console.log("--------------");
   }
 }
