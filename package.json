@@ -4,7 +4,7 @@
   "description": "Crypto prediction",
   "main": "index.ts",
   "scripts": {
-    "test": "ts-node ./src/index.ts"
+    "start": "ts-node ./src/index.ts"
   },
   "author": "Brice Friha",
   "license": "ISC",
