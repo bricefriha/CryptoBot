@@ -12,11 +12,6 @@ export default class Checker {
   public get Tokens(): Token[] {
     return this._tokens;
   }
-
-  private _arrayTok: string;
-  public get ArrayTok(): string {
-    return this._arrayTok;
-  }
   // public set tokens   (v : Array<Token>) {
   //     this._tokens     = v;
   // }
@@ -60,7 +55,6 @@ export default class Checker {
    * Run
    */
   public Run() {
-    console.log(this._tokens);
     // Loop symbols
     for (let token of this.Tokens) {
       // Get the information about them#
@@ -70,11 +64,6 @@ export default class Checker {
         `https://api.coingecko.com/api/v3/coins/${token.id}/market_chart?vs_currency=usd&days=7`
       ).then(async (res) => {
         await res.json().then((body) => {
-          // get the hisghest value
-          // var maxObj = body.reduce(function (max: number, obj: Array<number>) {
-          //   let current = obj[1];
-          //   return current > max ? current : max;
-          // });
           let allPrices: number[] = [];
           for (const key of body.prices) {
             allPrices.push(key[1]);
@@ -86,10 +75,15 @@ export default class Checker {
           ) {
             return Math.max(accumulatedValue, currentValue);
           });
+
+          let currPrice = allPrices[allPrices.length - 1];
+          let percentDown = (((maxObj - currPrice) / maxObj) * 100).toFixed(2);
+
           console.log("--------------");
           console.log(token.name);
           console.log(`max: ${maxObj}`);
-          console.log(`current: ${allPrices[allPrices.length - 1]}`);
+          console.log(`current: ${currPrice}`);
+          console.log(`down: ${percentDown}%`);
         });
       });
     }
