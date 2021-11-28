@@ -7,7 +7,7 @@ export default class Checker {
   //   public get Symbols(): Array<string> {
   //     return this._symbols;
   //   }
-
+  private _interval: NodeJS.Timer;
   private _tokens: Token[];
   public get Tokens(): Token[] {
     return this._tokens;
@@ -17,6 +17,8 @@ export default class Checker {
   // }
 
   constructor() {
+    this._interval = setInterval(() => {});
+    clearInterval(this._interval);
     // All the crypto symbols that need to be checked
     this._tokens = [
       {
@@ -55,39 +57,54 @@ export default class Checker {
    * Run
    */
   public Run() {
-    // Loop symbols
-    for (let token of this.Tokens) {
-      // Get the information about them#
+    this._interval = setInterval(() => {
+      console.log("--------------");
 
-      // get highest value within the last 7 days
-      fetch(
-        `https://api.coingecko.com/api/v3/coins/${token.id}/market_chart?vs_currency=usd&days=7`
-      ).then(async (res) => {
-        await res.json().then((body) => {
-          let allPrices: number[] = [];
-          for (const key of body.prices) {
-            allPrices.push(key[1]);
-          }
+      console.log(`Time: ${new Date(Date.now()).toUTCString()}`);
+      console.log("--------------");
 
-          let maxObj = allPrices.reduce(function (
-            accumulatedValue: number,
-            currentValue: number
-          ) {
-            return Math.max(accumulatedValue, currentValue);
+      // method to be executed;
+
+      // Loop symbols
+      for (let token of this.Tokens) {
+        // Get the information about them#
+
+        // get highest value within the last 7 days
+        fetch(
+          `https://api.coingecko.com/api/v3/coins/${token.id}/market_chart?vs_currency=usd&days=7`
+        ).then(async (res) => {
+          await res.json().then((body) => {
+            let allPrices: number[] = [];
+            for (const key of body.prices) {
+              allPrices.push(key[1]);
+            }
+
+            let maxObj = allPrices.reduce(function (
+              accumulatedValue: number,
+              currentValue: number
+            ) {
+              return Math.max(accumulatedValue, currentValue);
+            });
+
+            let currPrice = allPrices[allPrices.length - 1];
+            let percentDown = ((maxObj - currPrice) / maxObj) * 100;
+            let goodBuy = percentDown > 35;
+
+            console.log("--------------");
+            console.log(token.name);
+            console.log(`Max: ${maxObj}`);
+            console.log(`Current: ${currPrice}`);
+            console.log(`Down: ${percentDown.toFixed(2)}%`);
+            console.log(`Good buy: ${goodBuy}`);
           });
-
-          let currPrice = allPrices[allPrices.length - 1];
-          let percentDown = ((maxObj - currPrice) / maxObj) * 100;
-
-          console.log("--------------");
-          console.log(token.name);
-          console.log(`max: ${maxObj}`);
-          console.log(`current: ${currPrice}`);
-          console.log(`Down: ${percentDown.toFixed(2)}`);
-          console.log(`Good buy: ${percentDown > 40}`);
         });
-      });
-    }
-    console.log("--------------");
+      }
+    }, 60000);
+  }
+  /**
+   * Stop
+   */
+  public Stop() {
+    clearInterval(this._interval);
   }
 }
