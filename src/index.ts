@@ -12,3 +12,4 @@ console.log(test.sayHello());
 // });
 let checker = new Checker();
 checker.Run();
+checker.SendNotification("test", "ts");

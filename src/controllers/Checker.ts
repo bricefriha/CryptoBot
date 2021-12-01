@@ -107,4 +107,30 @@ export default class Checker {
   public Stop() {
     clearInterval(this._interval);
   }
+  public SendNotification(title: string, msg: string) {
+    fetch(
+      `https://fcm.googleapis.com/v1/projects/cryptobob-eaff8/messages:send`,
+      {
+        method: "POST",
+        headers: {
+          Authorization:
+            "Bearer ya29.a0ARrdaM8hVqgOXBwPyTkPGtEnnd0C7H09JOMcmnzu5LSDnVGK6qLBVQejy42MAEOKPYck-Orpai_cPm0dE_mWgCUKfIN46OX6DSHyt5GUbwiik5Pfj2_d6LztKIZ7wbej1E_x5I36HiniMx35fulC1THnWRd_",
+        },
+        body: `
+        {
+  "message": {
+    "notification": {
+      "title": "${title}",
+      "body": "${msg}"
+    },
+    "condition": "'allDevices' in topics || 'android' in topics || 'ios' in topics"
+    
+  }
+}
+    `,
+      }
+    ).then(async (res) => {
+      console.log(res.status);
+    });
+  }
 }
