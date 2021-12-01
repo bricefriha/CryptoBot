@@ -25,26 +25,31 @@ export default class Checker {
         id: "solana",
         symbol: "sol",
         name: "Solana",
+        notificationSent: false,
       },
       {
         id: "dogecoin",
         symbol: "doge",
         name: "Dogecoin",
+        notificationSent: false,
       },
       {
         id: "axie-infinity",
         symbol: "axs",
         name: "Axie Infinity",
+        notificationSent: false,
       },
       {
         id: "shiba-inu",
         symbol: "shib",
         name: "Shiba Inu",
+        notificationSent: false,
       },
       {
         id: "terra-luna",
         symbol: "luna",
         name: "Terra",
+        notificationSent: false,
       },
       // 'solana',
       // 'DOGE',
@@ -97,15 +102,28 @@ export default class Checker {
             console.log(`Down: ${percentDown.toFixed(2)}%`);
             console.log(`Good buy: ${goodBuy}`);
 
-            // Send notification if it's a goodby
-            this.SendNotification(
-              `Buy alert: ${token.name}!!!`,
-              `${token.name} is currently a good buy at ${currPrice}.`
-            );
+            if (token.notificationSent) {
+              // Note: redendant on perpuse
+              if (!goodBuy) {
+                this.Tokens[this.Tokens.indexOf(token)].notificationSent =
+                  false;
+                //token.notificationSent = false;
+              }
+              return;
+            }
+
+            if (goodBuy) {
+              // Send notification if it's a goodby
+              this.SendNotification(
+                `Buy alert: ${token.name}!!!`,
+                `${token.name} is currently a good buy at ${currPrice}.`
+              );
+              this.Tokens[this.Tokens.indexOf(token)].notificationSent = true;
+            }
           });
         });
       }
-    }, 60000);
+    }, 30000);
   }
   /**
    * Stop
@@ -120,7 +138,7 @@ export default class Checker {
         method: "POST",
         headers: {
           Authorization:
-            "Bearer ya29.a0ARrdaM8hVqgOXBwPyTkPGtEnnd0C7H09JOMcmnzu5LSDnVGK6qLBVQejy42MAEOKPYck-Orpai_cPm0dE_mWgCUKfIN46OX6DSHyt5GUbwiik5Pfj2_d6LztKIZ7wbej1E_x5I36HiniMx35fulC1THnWRd_",
+            "Bearer ya29.a0ARrdaM9zZcAUyb0bT2EDZJ1YUNDB4RyJGmlyN1RvsBg-WZbj0xgadGed4mBqI3PtHzkn34pb7endIAku7Nikf4pqhWGDaAUKu7HeBiwt6una1fi2_IwmNVkWpjB3KuL18oJ9vLWmHCGnq5-OLIwbNI9Pr77k",
         },
         body: `
         {
