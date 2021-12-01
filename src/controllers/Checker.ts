@@ -96,6 +96,12 @@ export default class Checker {
             console.log(`Current: ${currPrice}`);
             console.log(`Down: ${percentDown.toFixed(2)}%`);
             console.log(`Good buy: ${goodBuy}`);
+
+            // Send notification if it's a goodby
+            this.SendNotification(
+              `Buy alert: ${token.name}!!!`,
+              `${token.name} is currently a good buy at ${currPrice}.`
+            );
           });
         });
       }
