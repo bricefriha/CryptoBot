@@ -12,4 +12,4 @@ import Checker from "./controllers/Checker";
 // });
 let checker = new Checker();
 checker.Run();
-checker.SendNotification("test", "ts");
+checker.SendNotification("Imformation", "the server just started");

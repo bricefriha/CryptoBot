@@ -155,7 +155,6 @@ export default class Checker {
   }
   public SendNotification(title: string, msg: string) {
     this.GetToken().then(async (accessToken) => {
-      console.log(accessToken);
       fetch(
         `https://fcm.googleapis.com/v1/projects/cryptobob-eaff8/messages:send`,
         {
@@ -177,7 +176,7 @@ export default class Checker {
     `,
         }
       ).then(async (res) => {
-        console.log(res.status);
+        console.log(`Notification sent: ${res.status}`);
       });
     });
   }
