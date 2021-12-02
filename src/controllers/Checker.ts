@@ -1,6 +1,13 @@
 import Token from "../Models/Token";
 import fetch from "node-fetch";
+import { google } from "googleapis";
+import key from "../placeholders/firebase.json";
 
+const PROJECT_ID = "<YOUR-PROJECT-ID>";
+const HOST = "fcm.googleapis.com";
+const PATH = "/v1/projects/" + PROJECT_ID + "/messages:send";
+const MESSAGING_SCOPE = "https://www.googleapis.com/auth/firebase.messaging";
+const SCOPES = [MESSAGING_SCOPE];
 export default class Checker {
   // List or all the crypto symbols that need to be checked
   //   private _symbols: Array<string>;
@@ -15,10 +22,10 @@ export default class Checker {
   // public set tokens   (v : Array<Token>) {
   //     this._tokens     = v;
   // }
-
   constructor() {
     this._interval = setInterval(() => {});
     clearInterval(this._interval);
+
     // All the crypto symbols that need to be checked
     this._tokens = [
       {
@@ -147,15 +154,16 @@ export default class Checker {
     clearInterval(this._interval);
   }
   public SendNotification(title: string, msg: string) {
-    fetch(
-      `https://fcm.googleapis.com/v1/projects/cryptobob-eaff8/messages:send`,
-      {
-        method: "POST",
-        headers: {
-          Authorization:
-            "Bearer ya29.a0ARrdaM9zZcAUyb0bT2EDZJ1YUNDB4RyJGmlyN1RvsBg-WZbj0xgadGed4mBqI3PtHzkn34pb7endIAku7Nikf4pqhWGDaAUKu7HeBiwt6una1fi2_IwmNVkWpjB3KuL18oJ9vLWmHCGnq5-OLIwbNI9Pr77k",
-        },
-        body: `
+    this.GetToken().then(async (accessToken) => {
+      console.log(accessToken);
+      fetch(
+        `https://fcm.googleapis.com/v1/projects/cryptobob-eaff8/messages:send`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: `
         {
   "message": {
     "notification": {
@@ -167,9 +175,33 @@ export default class Checker {
   }
 }
     `,
-      }
-    ).then(async (res) => {
-      console.log(res.status);
+        }
+      ).then(async (res) => {
+        console.log(res.status);
+      });
+    });
+  }
+
+  private GetToken() {
+    return new Promise(function (resolve, reject) {
+      ///const key = require(".../placeholders/firebase.json");
+      const jwtClient = new google.auth.JWT(
+        key.client_email,
+        "",
+        key.private_key,
+        SCOPES,
+        ""
+      );
+      jwtClient.authorize(async (err, tokens) => {
+        if (tokens) {
+          if (err) {
+            reject(err);
+            return;
+          }
+
+          resolve(tokens.access_token);
+        }
+      });
     });
   }
 }
