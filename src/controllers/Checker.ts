@@ -22,6 +22,18 @@ export default class Checker {
     // All the crypto symbols that need to be checked
     this._tokens = [
       {
+        id: "ethereum",
+        symbol: "eth",
+        name: "Ethereum",
+        notificationSent: false,
+      },
+      {
+        id: "bitcoin",
+        symbol: "btc",
+        name: "Bitcoin",
+        notificationSent: false,
+      },
+      {
         id: "solana",
         symbol: "sol",
         name: "Solana",
@@ -51,11 +63,14 @@ export default class Checker {
         name: "Terra",
         notificationSent: false,
       },
-      // 'solana',
-      // 'DOGE',
-      // 'AXS',
-      // 'SHIBE',
-      // 'LUNA'
+
+      {
+        id: "enjincoin",
+        symbol: "enj",
+        name: "Enjin Coin",
+
+        notificationSent: false,
+      },
     ];
   }
   /**
