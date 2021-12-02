@@ -2,7 +2,7 @@ import test from "./testclass";
 import fetch from "node-fetch";
 import Checker from "./controllers/Checker";
 
-console.log(test.sayHello());
+//console.log(test.sayHello());
 
 // Ping the server
 // fetch("https://api.coingecko.com/api/v3/ping").then(async (res) => {
@@ -12,4 +12,4 @@ console.log(test.sayHello());
 // });
 let checker = new Checker();
 checker.Run();
-checker.SendNotification("test", "ts");
+//checker.SendNotification("test", "ts");
