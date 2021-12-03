@@ -97,53 +97,58 @@ export default class Checker {
         // Get the information about them#
 
         // get highest value within the last 7 days
-        fetch(
-          `https://api.coingecko.com/api/v3/coins/${token.id}/market_chart?vs_currency=usd&days=7`
-        ).then(async (res) => {
-          await res.json().then((body) => {
-            let allPrices: number[] = [];
-            for (const key of body.prices) {
-              allPrices.push(key[1]);
-            }
-
-            let maxObj = allPrices.reduce(function (
-              accumulatedValue: number,
-              currentValue: number
-            ) {
-              return Math.max(accumulatedValue, currentValue);
-            });
-
-            let currPrice = allPrices[allPrices.length - 1];
-            let percentDown = ((maxObj - currPrice) / maxObj) * 100;
-            let goodBuy = percentDown > 25;
-
-            console.log("--------------");
-            console.log(token.name);
-            console.log(`Max: ${maxObj}`);
-            console.log(`Current: ${currPrice}`);
-            console.log(`Down: ${percentDown.toFixed(2)}%`);
-            console.log(`Good buy: ${goodBuy}`);
-
-            if (token.notificationSent) {
-              // Note: redendant on perpuse
-              if (!goodBuy) {
-                this.Tokens[this.Tokens.indexOf(token)].notificationSent =
-                  false;
-                //token.notificationSent = false;
+        try {
+          fetch(
+            `https://api.coingecko.com/api/v3/coins/${token.id}/market_chart?vs_currency=usd&days=7`
+          ).then(async (res) => {
+            await res.json().then((body) => {
+              let allPrices: number[] = [];
+              for (const key of body.prices) {
+                allPrices.push(key[1]);
               }
-              return;
-            }
 
-            if (goodBuy) {
-              // Send notification if it's a goodby
-              this.SendNotification(
-                `Buy alert: ${token.name}!!!`,
-                `${token.name} is currently a good buy at ${currPrice}.`
-              );
-              this.Tokens[this.Tokens.indexOf(token)].notificationSent = true;
-            }
+              let maxObj = allPrices.reduce(function (
+                accumulatedValue: number,
+                currentValue: number
+              ) {
+                return Math.max(accumulatedValue, currentValue);
+              });
+
+              let currPrice = allPrices[allPrices.length - 1];
+              let percentDown = ((maxObj - currPrice) / maxObj) * 100;
+              let goodBuy = percentDown > 23;
+
+              console.log("--------------");
+              console.log(token.name);
+              console.log(`Max: ${maxObj}`);
+              console.log(`Current: ${currPrice}`);
+              console.log(`Down: ${percentDown.toFixed(2)}%`);
+              console.log(`Good buy: ${goodBuy}`);
+
+              if (token.notificationSent) {
+                // Note: redendant on perpuse
+                if (!goodBuy) {
+                  this.Tokens[this.Tokens.indexOf(token)].notificationSent =
+                    false;
+                  //token.notificationSent = false;
+                }
+                return;
+              }
+
+              if (goodBuy) {
+                // Send notification if it's a goodby
+                this.SendNotification(
+                  `Buy alert: ${token.name}!!!`,
+                  `${token.name} is currently a good buy at ${currPrice}.`
+                );
+                this.Tokens[this.Tokens.indexOf(token)].notificationSent = true;
+              }
+            });
           });
-        });
+        } catch (error) {
+          // if error connection to coin gecko
+          console.log(error);
+        }
       }
     }, 30000);
   }
