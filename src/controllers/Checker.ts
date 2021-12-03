@@ -65,6 +65,12 @@ export default class Checker {
         notificationSent: false,
       },
       {
+        id: "coti",
+        symbol: "coti",
+        name: "COTI",
+        notificationSent: false,
+      },
+      {
         id: "terra-luna",
         symbol: "luna",
         name: "Terra",
@@ -75,7 +81,6 @@ export default class Checker {
         id: "enjincoin",
         symbol: "enj",
         name: "Enjin Coin",
-
         notificationSent: false,
       },
     ];
@@ -123,7 +128,7 @@ export default class Checker {
               console.log(`Max: ${maxObj}`);
               console.log(`Current: ${currPrice}`);
               console.log(`Down: ${percentDown.toFixed(2)}%`);
-              console.log(`Good buy: ${goodBuy}`);
+              console.log(`Buy signal: ${goodBuy}`);
 
               if (token.notificationSent) {
                 // Note: redendant on perpuse
