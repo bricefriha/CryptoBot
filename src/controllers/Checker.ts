@@ -121,7 +121,7 @@ export default class Checker {
 
               let currPrice = allPrices[allPrices.length - 1];
               let percentDown = ((maxObj - currPrice) / maxObj) * 100;
-              let goodBuy = percentDown > 23;
+              let goodBuy = percentDown >= 29.5;
 
               console.log("--------------");
               console.log(token.name);
@@ -144,7 +144,7 @@ export default class Checker {
                 // Send notification if it's a goodby
                 this.SendNotification(
                   `Buy alert: ${token.name}!!!`,
-                  `${token.name} is currently a good buy at ${currPrice}.`
+                  `${token.name} is currently a good buy at $${currPrice}.`
                 );
                 this.Tokens[this.Tokens.indexOf(token)].notificationSent = true;
               }
