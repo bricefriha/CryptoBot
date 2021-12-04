@@ -83,6 +83,18 @@ export default class Checker {
         name: "Enjin Coin",
         notificationSent: false,
       },
+      {
+        id: "decentraland",
+        symbol: "mana",
+        name: "Decentraland",
+        notificationSent: false,
+      },
+      {
+        id: "gala",
+        symbol: "gala",
+        name: "Gala",
+        notificationSent: false,
+      },
     ];
   }
   /**
@@ -212,5 +224,10 @@ export default class Checker {
         }
       });
     });
+  }
+  private resetConsoleLines() {
+    for (let index = 0; index < 6; index++) {
+      process.stdout.clearLine(0);
+    }
   }
 }
