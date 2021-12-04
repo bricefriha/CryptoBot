@@ -84,6 +84,11 @@ export default class Checker {
         notificationSent: false,
       },
       {
+        id: "polkadot",
+        symbol: "dot",
+        name: "Polkadot",
+      },
+      {
         id: "decentraland",
         symbol: "mana",
         name: "Decentraland",
