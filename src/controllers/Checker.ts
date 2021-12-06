@@ -76,6 +76,12 @@ export default class Checker {
         name: "Terra",
         notificationSent: false,
       },
+      {
+        id: "monero",
+        symbol: "xmr",
+        name: "Monero",
+        notificationSent: false,
+      },
 
       {
         id: "enjincoin",
