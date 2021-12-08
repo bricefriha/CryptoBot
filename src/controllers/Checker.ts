@@ -185,7 +185,7 @@ export default class Checker {
           console.log(error);
         }
       }
-    }, 3000);
+    }, 30000);
   }
   /**
    * Stop
