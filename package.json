@@ -4,14 +4,16 @@
   "description": "Crypto prediction",
   "main": "index.ts",
   "scripts": {
-    "start": "ts-node ./src/index.ts"
+    "start": "ts-node ./src/index.ts --trace-warnings"
   },
   "author": "Brice Friha",
   "license": "ISC",
   "dependencies": {
     "@types/node": "^16.11.11",
     "@types/yargs": "^17.0.7",
+    "dns-socket": "^4.2.2",
     "googleapis": "^92.0.0",
+    "internet-available": "^1.0.0",
     "node-fetch": "^2.6.6",
     "save-dev": "^0.0.1-security",
     "ts-node": "^10.4.0",

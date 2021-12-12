@@ -2,12 +2,15 @@ import Token from "../Models/Token";
 import fetch from "node-fetch";
 import { google } from "googleapis";
 import key from "../placeholders/firebase.json";
+// @ts-ignore
+import internet from "../Utility/internet";
 
 const PROJECT_ID = "<YOUR-PROJECT-ID>";
 const HOST = "fcm.googleapis.com";
 const PATH = "/v1/projects/" + PROJECT_ID + "/messages:send";
 const MESSAGING_SCOPE = "https://www.googleapis.com/auth/firebase.messaging";
 const SCOPES = [MESSAGING_SCOPE];
+
 export default class Checker {
   // List or all the crypto symbols that need to be checked
   //   private _symbols: Array<string>;
@@ -119,72 +122,82 @@ export default class Checker {
       console.log(`Time: ${new Date(Date.now()).toUTCString()}`);
       console.log("--------------");
 
-      // method to be executed;
+      internet({
+        // Provide maximum execution time for the verification
+        timeout: 500,
+        // If it tries 5 times and it fails, then it will throw no internet
+        retries: 1,
+      })
+        .then(() => {
+          // Loop symbols
+          for (let token of this.Tokens) {
+            // Get the information about them#
 
-      // Loop symbols
-      for (let token of this.Tokens) {
-        // Get the information about them#
+            // get highest value within the last 7 days
+            try {
+              fetch(
+                `https://api.coingecko.com/api/v3/coins/${token.id}/market_chart?vs_currency=usd&days=7`
+              ).then(async (res) => {
+                await res
+                  .json()
+                  .then((body) => {
+                    let allPrices: number[] = [];
+                    for (const key of body.prices) {
+                      allPrices.push(key[1]);
+                    }
 
-        // get highest value within the last 7 days
-        try {
-          fetch(
-            `https://api.coingecko.com/api/v3/coins/${token.id}/market_chart?vs_currency=usd&days=7`
-          ).then(async (res) => {
-            await res
-              .json()
-              .then((body) => {
-                let allPrices: number[] = [];
-                for (const key of body.prices) {
-                  allPrices.push(key[1]);
-                }
+                    let maxObj = allPrices.reduce(function (
+                      accumulatedValue: number,
+                      currentValue: number
+                    ) {
+                      return Math.max(accumulatedValue, currentValue);
+                    });
 
-                let maxObj = allPrices.reduce(function (
-                  accumulatedValue: number,
-                  currentValue: number
-                ) {
-                  return Math.max(accumulatedValue, currentValue);
-                });
+                    let currPrice = allPrices[allPrices.length - 1];
+                    let percentDown = ((maxObj - currPrice) / maxObj) * 100;
+                    let goodBuy = percentDown >= 29.5;
 
-                let currPrice = allPrices[allPrices.length - 1];
-                let percentDown = ((maxObj - currPrice) / maxObj) * 100;
-                let goodBuy = percentDown >= 29.5;
+                    console.log("--------------");
+                    console.log(token.name);
+                    console.log(`Max: ${maxObj}`);
+                    console.log(`Current: ${currPrice}`);
+                    console.log(`Down: ${percentDown.toFixed(2)}%`);
+                    console.log(`Buy signal: ${goodBuy}`);
 
-                console.log("--------------");
-                console.log(token.name);
-                console.log(`Max: ${maxObj}`);
-                console.log(`Current: ${currPrice}`);
-                console.log(`Down: ${percentDown.toFixed(2)}%`);
-                console.log(`Buy signal: ${goodBuy}`);
+                    if (token.notificationSent) {
+                      // Note: redendant on perpuse
+                      if (!goodBuy) {
+                        this.Tokens[
+                          this.Tokens.indexOf(token)
+                        ].notificationSent = false;
+                        //token.notificationSent = false;
+                      }
+                      return;
+                    }
 
-                if (token.notificationSent) {
-                  // Note: redendant on perpuse
-                  if (!goodBuy) {
-                    this.Tokens[this.Tokens.indexOf(token)].notificationSent =
-                      false;
-                    //token.notificationSent = false;
-                  }
-                  return;
-                }
-
-                if (goodBuy) {
-                  // Send notification if it's a goodby
-                  this.SendNotification(
-                    `Buy alert: ${token.name}!!!`,
-                    `${token.name} is currently a good buy at $${currPrice}.`
-                  );
-                  this.Tokens[this.Tokens.indexOf(token)].notificationSent =
-                    true;
-                }
-              })
-              .catch((err) => {
-                console.log(err);
+                    if (goodBuy) {
+                      // Send notification if it's a goodby
+                      this.SendNotification(
+                        `Buy alert: ${token.name}!!!`,
+                        `${token.name} is currently a good buy at $${currPrice}.`
+                      );
+                      this.Tokens[this.Tokens.indexOf(token)].notificationSent =
+                        true;
+                    }
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  });
               });
-          });
-        } catch (error) {
-          // if error connection to coin gecko
-          console.log(error);
-        }
-      }
+            } catch (error) {
+              // if error connection to coin gecko
+              console.log(error);
+            }
+          }
+        })
+        .catch(() => {
+          console.log("No internet");
+        });
     }, 30000);
   }
   /**
@@ -246,6 +259,15 @@ export default class Checker {
   private resetConsoleLines() {
     for (let index = 0; index < 6; index++) {
       process.stdout.clearLine(0);
+    }
+  }
+  public ping(host: string): boolean {
+    var ImageObject = new Image();
+    ImageObject.src = "http://" + host + "/URL/to-a-known-image.jpg"; //e.g. logo -- mind the caching, maybe use a dynamic querystring
+    if (ImageObject.height > 0) {
+      return true;
+    } else {
+      return false;
     }
   }
 }
