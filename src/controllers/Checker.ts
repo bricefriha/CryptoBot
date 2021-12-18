@@ -122,15 +122,15 @@ export default class Checker {
       console.log(`Time: ${new Date(Date.now()).toUTCString()}`);
       console.log("--------------");
 
-      internet({
-        // Provide maximum execution time for the verification
-        timeout: 500,
-        // If it tries 5 times and it fails, then it will throw no internet
-        retries: 1,
-      })
-        .then(() => {
-          // Loop symbols
-          for (let token of this.Tokens) {
+      // Loop symbols
+      for (let token of this.Tokens) {
+        internet({
+          // Provide maximum execution time for the verification
+          timeout: 500,
+          // If it tries 5 times and it fails, then it will throw no internet
+          retries: 1,
+        })
+          .then(() => {
             // Get the information about them#
 
             // get highest value within the last 7 days
@@ -193,11 +193,11 @@ export default class Checker {
               // if error connection to coin gecko
               console.log(error);
             }
-          }
-        })
-        .catch(() => {
-          console.log("No internet");
-        });
+          })
+          .catch(() => {
+            console.log("No internet");
+          });
+      }
     }, 30000);
   }
   /**
