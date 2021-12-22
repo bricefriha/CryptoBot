@@ -130,12 +130,12 @@ export default class Checker {
           // If it tries 5 times and it fails, then it will throw no internet
           retries: 1,
         })
-          .then(() => {
+          .then(async () => {
             // Get the information about them#
 
             // get highest value within the last 7 days
             try {
-              fetch(
+              await fetch(
                 `https://api.coingecko.com/api/v3/coins/${token.id}/market_chart?vs_currency=usd&days=7`
               ).then(async (res) => {
                 await res
