@@ -50,6 +50,12 @@ export default class Checker {
         notificationSent: false,
       },
       {
+        id: "cardano",
+        symbol: "ada",
+        name: "Cardano",
+        notificationSent: false,
+      },
+      {
         id: "dogecoin",
         symbol: "doge",
         name: "Dogecoin",
