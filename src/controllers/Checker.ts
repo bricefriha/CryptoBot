@@ -161,7 +161,7 @@ export default class Checker {
 
                     let currPrice = allPrices[allPrices.length - 1];
                     let percentDown = ((maxObj - currPrice) / maxObj) * 100;
-                    let goodBuy = percentDown >= 29.5;
+                    let goodBuy = percentDown >= 25.9;
 
                     console.log("--------------");
                     console.log(token.name);
