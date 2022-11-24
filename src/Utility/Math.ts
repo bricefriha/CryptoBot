@@ -45,7 +45,7 @@ export default class MathC {
    * Calculate average
    */
   public static CalcultateAverage(nbs: number[]): number {
-    return nbs.reduce((a: number, b: number) => a + b) / nbs.length;
+    return nbs.reduce((a: number, b: number) => a + b) / nbs?.length;
   }
 
   /**

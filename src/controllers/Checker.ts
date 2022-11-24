@@ -168,8 +168,7 @@ export default class Checker {
                   const rsi = math.CalculateRSI(closes);
 
                   let latest = body[0];
-                  console.log(token.name);
-                  console.log(latest);
+
                   // Close
                   let c: number = latest[4];
                   // Low
@@ -181,10 +180,10 @@ export default class Checker {
                   // avoid 0 division
                   if (lc == 0) pourcentLowWick = 0;
                   else pourcentLowWick = ((c - l) / lc) * 100;
-                  console.log(c);
-                  console.log(c - l);
-                  console.log(lc);
-                  console.log((c - l) / lc);
+                  // console.log(c);
+                  // console.log(c - l);
+                  // console.log(lc);
+                  // console.log((c - l) / lc);
 
                   await fetch(
                     `https://api.coingecko.com/api/v3/coins/${token.id}/market_chart?vs_currency=usd&days=15`
@@ -193,7 +192,7 @@ export default class Checker {
                       .json()
                       .then(async (body) => {
                         let allPrices: number[] = [];
-                        for (const key of body.prices) {
+                        for (const key of body?.prices) {
                           allPrices.push(key[1]);
                         }
 
@@ -207,27 +206,25 @@ export default class Checker {
                         let currPrice = allPrices[allPrices.length - 1];
                         let percentDown = ((maxObj - currPrice) / maxObj) * 100;
                         let goodBuy = rsi <= 30;
-                        let badBuy = rsi >= 70;
-
+                        let badBuy = rsi >= 40;
+                        let goodSell = rsi > 60;
+                        let Suggestion = `${
+                          badBuy
+                            ? "Worst time to buy"
+                            : goodBuy
+                            ? "best time to buy"
+                            : "You can buy"
+                        }${goodSell ? ", Best time to sell" : ""}`;
                         console.log("--------------");
                         console.log(token.name);
                         console.log(`Max: ${maxObj}`);
                         console.log(`Current: ${currPrice}`);
                         console.log(`Down: ${percentDown.toFixed(2)}%`);
                         console.log(`Buy signal: ${goodBuy}`);
-                        console.log(
-                          `Suggestion: ${
-                            badBuy
-                              ? "Worst time to buy, time to sell"
-                              : goodBuy
-                              ? "best time to buy"
-                              : "You can buy"
-                          }`
-                        );
-                        console.log(
-                          `pourcentage lower shadow: ${pourcentLowWick}`
-                        );
+                        console.log(`Sell signal: ${goodSell}`);
                         console.log(`RSI: ${rsi}`);
+
+                        console.log(`Suggestion: ${Suggestion}`);
 
                         if (token.notificationSent) {
                           // Note: redendant on perpuse
@@ -241,10 +238,20 @@ export default class Checker {
                         }
 
                         if (goodBuy) {
-                          // Send notification if it's a goodby
+                          // Send notification if it's a goodbuy
                           this.SendNotification(
                             `Buy alert: ${token.name}!!!`,
                             `${token.name} is currently a good buy at $${currPrice}.`
+                          );
+                          this.Tokens[
+                            this.Tokens.indexOf(token)
+                          ].notificationSent = true;
+                        }
+                        if (goodSell) {
+                          // Send notification if it's a goodsell
+                          this.SendNotification(
+                            `Sell alert: ${token.name}!!!`,
+                            `If you want to buy ${token.name} now is the time at $${currPrice}.`
                           );
                           this.Tokens[
                             this.Tokens.indexOf(token)
@@ -266,7 +273,7 @@ export default class Checker {
             console.log("No internet");
           });
       }
-    }, 20000);
+    }, 60000);
   }
   /**
    * Stop
