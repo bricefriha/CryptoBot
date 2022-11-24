@@ -4,6 +4,7 @@ import { google } from "googleapis";
 import key from "../placeholders/firebase.json";
 // @ts-ignore
 import internet from "../Utility/internet";
+import math from "../Utility/Math";
 import { string } from "yargs";
 
 const PROJECT_ID = "<YOUR-PROJECT-ID>";
@@ -68,24 +69,24 @@ export default class Checker {
         name: "Axie Infinity",
         notificationSent: false,
       },
-      {
-        id: "shiba-inu",
-        symbol: "shib",
-        name: "Shiba Inu",
-        notificationSent: false,
-      },
+      // {
+      //   id: "shiba-inu",
+      //   symbol: "shib",
+      //   name: "Shiba Inu",
+      //   notificationSent: false,
+      // },
       {
         id: "coti",
         symbol: "coti",
         name: "COTI",
         notificationSent: false,
       },
-      {
-        id: "terra-luna",
-        symbol: "luna",
-        name: "Terra",
-        notificationSent: false,
-      },
+      // {
+      //   id: "terra-luna",
+      //   symbol: "luna",
+      //   name: "Terra",
+      //   notificationSent: false,
+      // },
       {
         id: "monero",
         symbol: "xmr",
@@ -144,9 +145,28 @@ export default class Checker {
             try {
               let pourcentLowWick: Number;
               await fetch(
-                `https://api.coingecko.com/api/v3/coins/${token.id}/ohlc?vs_currency=usd&days=7`
+                `https://api.coingecko.com/api/v3/coins/${token.id}/ohlc?vs_currency=usd&days=14`
               ).then(async (res) => {
                 await res.json().then(async (body) => {
+                  // Get all the closes
+                  let closes: number[] = [];
+
+                  try {
+                    body?.forEach((allVal: number[]) => {
+                      closes.push(allVal[4]);
+                    });
+                  } catch (error) {
+                    console.warn(error);
+                    console.log(body);
+                    if (body.status.error_code === 429) {
+                      console.warn("Limit reached");
+                      return;
+                    }
+                  }
+
+                  // Get RSI
+                  const rsi = math.CalculateRSI(closes);
+
                   let latest = body[0];
                   console.log(token.name);
                   console.log(latest);
@@ -167,7 +187,7 @@ export default class Checker {
                   console.log((c - l) / lc);
 
                   await fetch(
-                    `https://api.coingecko.com/api/v3/coins/${token.id}/market_chart?vs_currency=usd&days=7`
+                    `https://api.coingecko.com/api/v3/coins/${token.id}/market_chart?vs_currency=usd&days=15`
                   ).then(async (res) => {
                     await res
                       .json()
@@ -186,7 +206,8 @@ export default class Checker {
 
                         let currPrice = allPrices[allPrices.length - 1];
                         let percentDown = ((maxObj - currPrice) / maxObj) * 100;
-                        let goodBuy = percentDown >= 29.5;
+                        let goodBuy = rsi <= 30;
+                        let badBuy = rsi >= 70;
 
                         console.log("--------------");
                         console.log(token.name);
@@ -195,8 +216,18 @@ export default class Checker {
                         console.log(`Down: ${percentDown.toFixed(2)}%`);
                         console.log(`Buy signal: ${goodBuy}`);
                         console.log(
+                          `Suggestion: ${
+                            badBuy
+                              ? "Worst time to buy, time to sell"
+                              : goodBuy
+                              ? "best time to buy"
+                              : "You can buy"
+                          }`
+                        );
+                        console.log(
                           `pourcentage lower shadow: ${pourcentLowWick}`
                         );
+                        console.log(`RSI: ${rsi}`);
 
                         if (token.notificationSent) {
                           // Note: redendant on perpuse
@@ -235,7 +266,7 @@ export default class Checker {
             console.log("No internet");
           });
       }
-    }, 10000);
+    }, 20000);
   }
   /**
    * Stop
