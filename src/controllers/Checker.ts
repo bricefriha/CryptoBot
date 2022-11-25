@@ -63,12 +63,12 @@ export default class Checker {
         name: "Dogecoin",
         notificationSent: false,
       },
-      {
-        id: "axie-infinity",
-        symbol: "axs",
-        name: "Axie Infinity",
-        notificationSent: false,
-      },
+      // {
+      //   id: "axie-infinity",
+      //   symbol: "axs",
+      //   name: "Axie Infinity",
+      //   notificationSent: false,
+      // },
       // {
       //   id: "shiba-inu",
       //   symbol: "shib",
@@ -116,6 +116,18 @@ export default class Checker {
         id: "gala",
         symbol: "gala",
         name: "Gala",
+        notificationSent: false,
+      },
+      {
+        id: "terra-luna",
+        symbol: "lunc",
+        name: "Terra Luna Classic",
+        notificationSent: false,
+      },
+      {
+        id: "osmosis",
+        symbol: "osmo",
+        name: "Osmosis",
         notificationSent: false,
       },
     ];
