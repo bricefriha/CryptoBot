@@ -130,6 +130,12 @@ export default class Checker {
         name: "Osmosis",
         notificationSent: false,
       },
+      {
+        id: "crypto-com-chain",
+        symbol: "cro",
+        name: "Cronos",
+        notificationSent: false,
+      },
     ];
   }
   /**
