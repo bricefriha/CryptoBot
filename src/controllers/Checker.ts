@@ -130,6 +130,12 @@ export default class Checker {
         name: "Osmosis",
         notificationSent: false,
       },
+      {
+        id: "crypto-com-chain",
+        symbol: "cro",
+        name: "Cronos",
+        notificationSent: false,
+      },
     ];
   }
   /**
@@ -265,6 +271,15 @@ export default class Checker {
                             `Sell alert: ${token.name}!!!`,
                             `If you want to buy ${token.name} now is the time at $${currPrice}.`
                           );
+
+                          this.Tokens[
+                            this.Tokens.indexOf(token)
+                          ].notificationSent = true;
+                        }
+
+                        // Is there is no sell and buy alert?
+                        if (!goodBuy && !goodSell && token.notificationSent){
+                          // Flag the notification
                           this.Tokens[
                             this.Tokens.indexOf(token)
                           ].notificationSent = true;
@@ -293,6 +308,11 @@ export default class Checker {
   public Stop() {
     clearInterval(this._interval);
   }
+  /**
+   * Send a notification
+   * @param title tile of the notification
+   * @param msg content of the notification
+   */
   public SendNotification(title: string, msg: string) {
     this.GetToken().then(async (accessToken) => {
       fetch(
