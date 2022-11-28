@@ -6,13 +6,17 @@ import key from "../placeholders/firebase.json";
 import internet from "../Utility/internet";
 import math from "../Utility/Math";
 import { string } from "yargs";
+import {WebsocketBuilder, Websocket} from 'websocket-ts';
+import express from "express";
+import * as http from 'http';
+import * as WebSocket from 'ws';
 
 const PROJECT_ID = "<YOUR-PROJECT-ID>";
 const HOST = "fcm.googleapis.com";
 const PATH = "/v1/projects/" + PROJECT_ID + "/messages:send";
 const MESSAGING_SCOPE = "https://www.googleapis.com/auth/firebase.messaging";
 const SCOPES = [MESSAGING_SCOPE];
-
+let ws: WebSocket.Server;
 export default class Checker {
   // List or all the crypto symbols that need to be checked
   //   private _symbols: Array<string>;
@@ -30,7 +34,13 @@ export default class Checker {
   constructor() {
     this._interval = setInterval(() => {});
     clearInterval(this._interval);
-
+    // Setup the websocket
+    // ws = new WebsocketBuilder('ws://localhost:42421')
+    // .onOpen(() => { console.log("opened") })
+    // .onClose(() => { console.log("closed") })
+    // .onError(() => { console.log("error") })
+    // .onMessage((e: any) => { ws.send(e.data) })
+    // .build();
     // All the crypto symbols that need to be checked
     this._tokens = [
       {
@@ -370,7 +380,7 @@ export default class Checker {
   }
   public ping(host: string): boolean {
     var ImageObject = new Image();
-    ImageObject.src = "http://" + host + "/URL/to-a-known-image.jpg"; //e.g. logo -- mind the caching, maybe use a dynamic querystring
+    ImageObject.src = "http://" + host + "/URL/to-a-known-image.jpg"; 
     if (ImageObject.height > 0) {
       return true;
     } else {
