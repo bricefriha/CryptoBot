@@ -269,7 +269,7 @@ export default class Checker {
                           // Send notification if it's a goodsell
                           this.SendNotification(
                             `Sell alert: ${token.name}!!!`,
-                            `If you want to buy ${token.name} now is the time at $${currPrice}.`
+                            `If you want to sell ${token.name} now is the time at $${currPrice}.`
                           );
 
                           this.Tokens[
