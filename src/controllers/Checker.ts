@@ -63,6 +63,18 @@ export default class Checker {
         name: "Dogecoin",
         notificationSent: false,
       },
+      {
+        id: "ripple",
+        symbol: "xrp",
+        name: "XRP",
+        notificationSent: false,
+      },
+      {
+        id: "fantom",
+        symbol: "ftm",
+        name: "Fantom",
+        notificationSent: false,
+      },
       // {
       //   id: "axie-infinity",
       //   symbol: "axs",
@@ -124,12 +136,12 @@ export default class Checker {
         name: "Terra Luna Classic",
         notificationSent: false,
       },
-      {
-        id: "osmosis",
-        symbol: "osmo",
-        name: "Osmosis",
-        notificationSent: false,
-      },
+      // {
+      //   id: "osmosis",
+      //   symbol: "osmo",
+      //   name: "Osmosis",
+      //   notificationSent: false,
+      // },
       {
         id: "crypto-com-chain",
         symbol: "cro",
@@ -300,7 +312,7 @@ export default class Checker {
             console.log("No internet");
           });
       }
-    }, 60000);
+    }, 100000);
   }
   /**
    * Stop
