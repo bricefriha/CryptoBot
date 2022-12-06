@@ -264,6 +264,15 @@ export default class Checker {
                             ].notificationSent = false;
                             //token.notificationSent = false;
                           }
+                        if (token.notificationSent) {
+                          // Note: redendant on perpuse
+                          if (!goodSell) {
+                            this.Tokens[
+                              this.Tokens.indexOf(token)
+                            ].notificationSent = false;
+                            //token.notificationSent = false;
+                          }
+                          
                           return;
                         }
 
