@@ -275,7 +275,7 @@ export default class Checker {
                           return;
                         }
 
-                        if (goodBuy) {
+                        if (goodBuy && !token.notificationSent) {
                           // Send notification if it's a goodbuy
                           this.SendNotification(
                             `Buy alert: ${token.name}!!!`,
@@ -285,7 +285,7 @@ export default class Checker {
                             this.Tokens.indexOf(token)
                           ].notificationSent = true;
                         }
-                        if (goodSell) {
+                        if (goodSell && !token.notificationSent) {
                           // Send notification if it's a goodsell
                           this.SendNotification(
                             `Sell alert: ${token.name}!!!`,
