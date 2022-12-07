@@ -216,7 +216,7 @@ export default class Checker {
                   // console.log((c - l) / lc);
 
                   await fetch(
-                    `https://api.coingecko.com/api/v3/coins/${token.id}/market_chart?vs_currency=usd&days=15`
+                    `https://api.coingecko.com/api/v3/coins/${token.id}/market_chart?vs_currency=usd&days=14`
                   ).then(async (res) => {
                     await res
                       .json()
@@ -236,8 +236,8 @@ export default class Checker {
                         let currPrice = allPrices[allPrices.length - 1];
                         let percentDown = ((maxObj - currPrice) / maxObj) * 100;
                         let goodBuy = rsi <= 30;
-                        let badBuy = rsi >= 40;
-                        let goodSell = rsi > 60;
+                        let badBuy = rsi >= 50;
+                        let goodSell = rsi >= 65;
                         let Suggestion = `${
                           badBuy
                             ? "Worst time to buy"
