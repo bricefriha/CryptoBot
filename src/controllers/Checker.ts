@@ -274,16 +274,23 @@ export default class Checker {
                           
                           return;
                         }
-
+                        // Get token
+                        const tokenIndex = this.Tokens.indexOf(token); 
                         if (goodBuy && !token.notificationSent) {
                           // Send notification if it's a goodbuy
                           this.SendNotification(
                             `Buy alert: ${token.name}!!!`,
                             `${token.name} is currently a good buy at $${currPrice}.`
                           );
+                          
+                          let updatedToken = this.Tokens[
+                            tokenIndex
+                          ];
+
+                          updatedToken.notificationSent = true;
                           this.Tokens[
-                            this.Tokens.indexOf(token)
-                          ].notificationSent = true;
+                            tokenIndex
+                          ] = updatedToken;
                         }
                         if (goodSell && !token.notificationSent) {
                           // Send notification if it's a goodsell
@@ -292,9 +299,14 @@ export default class Checker {
                             `If you want to sell ${token.name} now is the time at $${currPrice}.`
                           );
 
+                          let updatedToken = this.Tokens[
+                            tokenIndex
+                          ];
+
+                          updatedToken.notificationSent = true;
                           this.Tokens[
-                            this.Tokens.indexOf(token)
-                          ].notificationSent = true;
+                            tokenIndex
+                          ] = updatedToken;
                         }
 
                         // Is there is no sell and buy alert?
