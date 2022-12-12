@@ -256,26 +256,45 @@ export default class Checker {
 
                         console.log(`Suggestion: ${Suggestion}`);
 
+                        // Get token index
+                        const tokenIndex = this.Tokens.indexOf(token); 
+
                         if (token.notificationSent) {
                           // Note: redendant on perpuse
                           if (!goodBuy) {
+                            // this.Tokens[
+                            //   this.Tokens.indexOf(token)
+                            // ].notificationSent = false;
                             this.Tokens[
-                              this.Tokens.indexOf(token)
-                            ].notificationSent = false;
+                              tokenIndex
+                            ] = {
+                              id: token.id,
+                              name: token.name,
+                              symbol: token.symbol,
+                              notificationSent: true,
+  
+                            };
                             //token.notificationSent = false;
                           }
                           // Note: redendant on perpuse
                           if (!goodSell) {
+                            // this.Tokens[
+                            //   this.Tokens.indexOf(token)
+                            // ].notificationSent = false;
                             this.Tokens[
-                              this.Tokens.indexOf(token)
-                            ].notificationSent = false;
+                              tokenIndex
+                            ] = {
+                              id: token.id,
+                              name: token.name,
+                              symbol: token.symbol,
+                              notificationSent: true,
+  
+                            };
                             //token.notificationSent = false;
                           }
                           
                           return;
                         }
-                        // Get token
-                        const tokenIndex = this.Tokens.indexOf(token); 
                         if (goodBuy && !token.notificationSent) {
                           // Send notification if it's a goodbuy
                           this.SendNotification(
@@ -283,14 +302,23 @@ export default class Checker {
                             `${token.name} is currently a good buy at $${currPrice}.`
                           );
                           
-                          let updatedToken = this.Tokens[
-                            tokenIndex
-                          ];
+                          // let updatedToken = this.Tokens[
+                          //   tokenIndex
+                          // ];
 
-                          updatedToken.notificationSent = true;
+                          // updatedToken.notificationSent = true;
+                          // this.Tokens[
+                          //   tokenIndex
+                          // ] = updatedToken;
                           this.Tokens[
                             tokenIndex
-                          ] = updatedToken;
+                          ] = {
+                            id: token.id,
+                            name: token.name,
+                            symbol: token.symbol,
+                            notificationSent: true,
+
+                          };
                         }
                         if (goodSell && !token.notificationSent) {
                           // Send notification if it's a goodsell
@@ -298,23 +326,32 @@ export default class Checker {
                             `Sell alert: ${token.name}!!!`,
                             `If you want to sell ${token.name} now is the time at $${currPrice}.`
                           );
-
-                          let updatedToken = this.Tokens[
-                            tokenIndex
-                          ];
-
-                          updatedToken.notificationSent = true;
                           this.Tokens[
                             tokenIndex
-                          ] = updatedToken;
+                          ] = {
+                            id: token.id,
+                            name: token.name,
+                            symbol: token.symbol,
+                            notificationSent: true,
+
+                          };
                         }
 
                         // Is there is no sell and buy alert?
                         if (!goodBuy && !goodSell && token.notificationSent){
                           // Flag the notification
+                          // this.Tokens[
+                          //   this.Tokens.indexOf(token)
+                          // ].notificationSent = true;
                           this.Tokens[
-                            this.Tokens.indexOf(token)
-                          ].notificationSent = true;
+                            tokenIndex
+                          ] = {
+                            id: token.id,
+                            name: token.name,
+                            symbol: token.symbol,
+                            notificationSent: true,
+
+                          };
                         }
                       })
                       .catch((err) => {
