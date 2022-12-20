@@ -262,9 +262,6 @@ export default class Checker {
                         if (token.notificationSent) {
                           // Note: redendant on perpuse
                           if (!goodBuy && !goodSell) {
-                            // this.Tokens[
-                            //   this.Tokens.indexOf(token)
-                            // ].notificationSent = false;
                             this.Tokens[
                               tokenIndex
                             ] = {
@@ -312,23 +309,6 @@ export default class Checker {
 
                           };
                         }
-
-                        // Is there is no sell and buy alert?
-                        // if (!goodBuy && !goodSell && token.notificationSent){
-                        //   // Flag the notification
-                        //   // this.Tokens[
-                        //   //   this.Tokens.indexOf(token)
-                        //   // ].notificationSent = true;
-                        //   this.Tokens[
-                        //     tokenIndex
-                        //   ] = {
-                        //     id: token.id,
-                        //     name: token.name,
-                        //     symbol: token.symbol,
-                        //     notificationSent: false,
-
-                        //   };
-                        // }
                       })
                       .catch((err) => {
                         console.log(err);
@@ -345,7 +325,7 @@ export default class Checker {
             console.log("No internet");
           });
       }
-    }, 100000);
+    }, 180000);
   }
   /**
    * Stop
