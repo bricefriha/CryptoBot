@@ -175,7 +175,7 @@ export default class Checker {
             try {
               let pourcentLowWick: Number;
               await fetch(
-                `https://api.coingecko.com/api/v3/coins/${token.id}/ohlc?vs_currency=usd&days=14`
+                `https://api.coingecko.com/api/v3/coins/${token.id}/ohlc?vs_currency=usd&days=30`
               ).then(async (res) => {
                 await res.json().then(async (body) => {
                   // Get all the closes
