@@ -237,7 +237,7 @@ export default class Checker {
                                         let currPrice = allPrices[allPrices.length - 1];
                                         let percentDown = ((maxObj - currPrice) / maxObj) * 100;
                                         let goodBuy = rsi<= 35;
-                                        let badBuy = rsi> = 50;
+                                        let badBuy = rsi >= 50;
                                         let goodSell = rsi > 60;
                                         let Suggestion = `${
                                             badBuy ? "Worst time to buy" : goodBuy ? "best time to buy" : "You can buy"
