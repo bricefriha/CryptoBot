@@ -316,7 +316,7 @@ export default class Checker {
                     console.log("No internet");
                 });
             }
-        }, 180000);
+        }, 240000);
     }
     /**
    * Stop
