@@ -61,6 +61,6 @@ export default class MathC {
 
     //
     let t = 100 / (1 + rs);
-    return 100 - t;
+    return Math.round(100 - t);
   }
 }
