@@ -225,8 +225,11 @@ export default class Checker {
                                     token.id
                                 }/market_chart?vs_currency=usd&days=14`).then(async (res) => {
                                     await res.json().then(async (body) => {
+
+                                        if (typeof body === 'undefined' && body === null)
+                                            return;
                                         let allPrices: number[] = [];
-                                        for (const key of body ?. prices) {
+                                        for (const key of body?. prices) {
                                             allPrices.push(key[1]);
                                         }
 
