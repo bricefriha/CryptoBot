@@ -336,7 +336,7 @@ export default class Checker {
    */
     public SendNotification(title : string, msg : string) {
         this.GetToken().then(async (accessToken) => {
-            fetch(`https://fcm.googleapis.com/v1/projects/cryptobob-eaff8/messages:send`, {
+            fetch(`https://${HOST}/v1/projects/cryptobob-eaff8/messages:send`, {
                 method: "POST",
                 headers: {
                     Authorization: `Bearer ${accessToken}`
@@ -383,7 +383,7 @@ export default class Checker {
     }
     public ping(host : string): boolean {
         var ImageObject = new Image();
-        ImageObject.src = "http://" + host + "/URL/to-a-known-image.jpg"; // e.g. logo -- mind the caching, maybe use a dynamic querystring
+        ImageObject.src = `http://${host}"/URL/to-a-known-image.jpg`; // e.g. logo -- mind the caching, maybe use a dynamic querystring
         if (ImageObject.height > 0) {
             return true;
         } else {
