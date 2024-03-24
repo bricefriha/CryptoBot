@@ -6,7 +6,8 @@ import tokens from '../placeholders/tokens.json';
 // @ts-ignore
 import internet from "../Utility/internet";
 import math from "../Utility/Math";
-import {string} from "yargs";
+import {number, string} from "yargs";
+import CoinsProcess from "./coinsProcess";
 
 const PROJECT_ID = "<YOUR-PROJECT-ID>";
 const HOST = "fcm.googleapis.com";
@@ -33,128 +34,7 @@ export default class Checker {
         // All the crypto symbols that need to be checked
 
         for (let i: number = 0; i < tokens.length; ++i)
-            this._tokens.push();
-    //     this._tokens = [
-    //         {
-    //             id: "ethereum",
-    //             symbol: "eth",
-    //             name: "Ethereum",
-    //             notificationSent: false
-    //         },
-    //         {
-    //             id: "bitcoin",
-    //             symbol: "btc",
-    //             name: "Bitcoin",
-    //             notificationSent: false
-    //         },
-    //         {
-    //             id: "solana",
-    //             symbol: "sol",
-    //             name: "Solana",
-    //             notificationSent: false
-    //         },
-    //         {
-    //             id: "cardano",
-    //             symbol: "ada",
-    //             name: "Cardano",
-    //             notificationSent: false
-    //         }, {
-    //             id: "dogecoin",
-    //             symbol: "doge",
-    //             name: "Dogecoin",
-    //             notificationSent: false
-    //         }, {
-    //             id: "ripple",
-    //             symbol: "xrp",
-    //             name: "XRP",
-    //             notificationSent: false
-    //         }, {
-    //             id: "fantom",
-    //             symbol: "ftm",
-    //             name: "Fantom",
-    //             notificationSent: false
-    //         },
-    //         // {
-    //         // id: "axie-infinity",
-    //         // symbol: "axs",
-    //         // name: "Axie Infinity",
-    //         // notificationSent: false,
-    //         // },
-    //         // {
-    //         // id: "shiba-inu",
-    //         // symbol: "shib",
-    //         // name: "Shiba Inu",
-    //         // notificationSent: false,
-    //         // },
-    //         {
-    //             id: "coti",
-    //             symbol: "coti",
-    //             name: "COTI",
-    //             notificationSent: false
-    //         },
-    //         // {
-    //         // id: "terra-luna",
-    //         // symbol: "luna",
-    //         // name: "Terra",
-    //         // notificationSent: false,
-    //         // },
-    //         {
-    //             id: "monero",
-    //             symbol: "xmr",
-    //             name: "Monero",
-    //             notificationSent: false
-    //         }, {
-    //             id: "enjincoin",
-    //             symbol: "enj",
-    //             name: "Enjin Coin",
-    //             notificationSent: false
-    //         }, {
-    //             id: "polkadot",
-    //             symbol: "dot",
-    //             name: "Polkadot",
-    //             notificationSent: false
-    //         }, {
-    //             id: "decentraland",
-    //             symbol: "mana",
-    //             name: "Decentraland",
-    //             notificationSent: false
-    //         }, {
-    //             id: "gala",
-    //             symbol: "gala",
-    //             name: "Gala",
-    //             notificationSent: false
-    //         },
-    //         // {
-    //         //     id: "terra-luna",
-    //         //     symbol: "lunc",
-    //         //     name: "Terra Luna Classic",
-    //         //     notificationSent: false
-    //         // },
-    //         {
-    //             id: "internet-computer",
-    //             symbol: "icp",
-    //             name: "Internet Computer",
-    //             notificationSent: false
-    //         },
-    //         // {
-    //         // id: "osmosis",
-    //         // symbol: "osmo",
-    //         // name: "Osmosis",
-    //         // notificationSent: false,
-    //         // },
-    //         {
-    //             id: "crypto-com-chain",
-    //             symbol: "cro",
-    //             name: "Cronos",
-    //             notificationSent: false
-    //         }, {
-    //             id: "matic-network",
-    //             symbol: "matic",
-    //             name: "Polygon",
-    //             notificationSent: false
-
-    //         },
-    //     ];
+            this._tokens.push(tokens[i]);
     }
         
     /**
@@ -177,7 +57,21 @@ export default class Checker {
                     retries: 1
                 }).then(async () => {
 
+                    let closes: number[] = [];
                     
+                    // Get the history of the token
+                    const values = await CoinsProcess.GetHistory(token.id);
+                    
+                    // Get all closes
+                    for (let i: number = 0; i < values.length; ++i){
+                        closes.push(+values[i].priceUsd)
+                    }
+                    // Get RSI
+                    const rsi = math.CalculateRSI(closes);
+
+                    console.log("-----");
+                    console.log(`${token.name}: ${rsi}`);
+
 
                     // Get the information about them#
                     
@@ -323,11 +217,11 @@ export default class Checker {
                     // } catch (error) { // if error connection to coin gecko
                     //     console.log(error);
                     // }
-                }).catch(() => {
-                    console.log("No internet");
+                }).catch((err : any) => {
+                    console.log(err);
                 });
             }
-        }, 30000);
+        }, 15000);
     }
     /**
    * Stop

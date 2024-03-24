@@ -74,13 +74,15 @@ export default class CoinsProcess {
         
         let result: PriceData[] = [];
 
-        if (tokenId)
+        if (tokenId) {
+            
+            const dateStart = new Date(new Date().getTime() - (14 * 24 * 60 * 60 * 1000));
             // Request all
-            await fetch(`${config.coincap_host}/v2/assets/${tokenId}/history?interval=d1`)
+            await fetch(`${config.coincap_host}/v2/assets/${tokenId}/history?interval=h1&start=${dateStart.getTime()}&end=${new Date().getTime()}`)
                 .then(async (res) => {
                     try {
 
-                        const responseBody: PriceResponse = await res.json(); 
+                        const responseBody: PriceResponse = await res.json();
                         result = responseBody.data;
                     } catch (err) {
 
@@ -88,11 +90,12 @@ export default class CoinsProcess {
                         return null;
                     }
                 }
-            ).
+                ).
                 catch(err => {
                     console.error(err);
                     return null;
-                })
+                });
+        }
         return result
     }
 }
