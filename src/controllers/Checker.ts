@@ -121,12 +121,14 @@ export default class Checker {
                 symbol: "gala",
                 name: "Gala",
                 notificationSent: false
-            }, {
-                id: "terra-luna",
-                symbol: "lunc",
-                name: "Terra Luna Classic",
-                notificationSent: false
-            }, {
+            },
+            // {
+            //     id: "terra-luna",
+            //     symbol: "lunc",
+            //     name: "Terra Luna Classic",
+            //     notificationSent: false
+            // },
+            {
                 id: "internet-computer",
                 symbol: "icp",
                 name: "Internet Computer",
@@ -183,7 +185,7 @@ export default class Checker {
                                 let closes: number[] = [];
 
                                 try {
-                                    body ?. forEach((allVal : number[]) => {
+                                    body?.forEach((allVal : number[]) => {
                                         closes.push(allVal[4]);
                                     });
                                 } catch (error) {
@@ -319,7 +321,7 @@ export default class Checker {
                     console.log("No internet");
                 });
             }
-        }, 240000);
+        }, 30000);
     }
     /**
    * Stop
