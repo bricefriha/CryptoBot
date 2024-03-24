@@ -2,6 +2,7 @@ import Token from "../Models/Token";
 import fetch from "node-fetch";
 import {google} from "googleapis";
 import key from "../placeholders/firebase.json";
+import tokens from '../placeholders/tokens.json';
 // @ts-ignore
 import internet from "../Utility/internet";
 import math from "../Utility/Math";
@@ -24,136 +25,138 @@ export default class Checker {
     public get Tokens(): Token[]{
         return this._tokens;
     }
-    // public set tokens   (v : Array<Token>) {
-    //     this._tokens     = v;
-    // }
+    
     constructor() {
         this._interval = setInterval(() => {});
         clearInterval(this._interval);
-
+        this._tokens = [];
         // All the crypto symbols that need to be checked
-        this._tokens = [
-            {
-                id: "ethereum",
-                symbol: "eth",
-                name: "Ethereum",
-                notificationSent: false
-            },
-            {
-                id: "bitcoin",
-                symbol: "btc",
-                name: "Bitcoin",
-                notificationSent: false
-            },
-            {
-                id: "solana",
-                symbol: "sol",
-                name: "Solana",
-                notificationSent: false
-            },
-            {
-                id: "cardano",
-                symbol: "ada",
-                name: "Cardano",
-                notificationSent: false
-            }, {
-                id: "dogecoin",
-                symbol: "doge",
-                name: "Dogecoin",
-                notificationSent: false
-            }, {
-                id: "ripple",
-                symbol: "xrp",
-                name: "XRP",
-                notificationSent: false
-            }, {
-                id: "fantom",
-                symbol: "ftm",
-                name: "Fantom",
-                notificationSent: false
-            },
-            // {
-            // id: "axie-infinity",
-            // symbol: "axs",
-            // name: "Axie Infinity",
-            // notificationSent: false,
-            // },
-            // {
-            // id: "shiba-inu",
-            // symbol: "shib",
-            // name: "Shiba Inu",
-            // notificationSent: false,
-            // },
-            {
-                id: "coti",
-                symbol: "coti",
-                name: "COTI",
-                notificationSent: false
-            },
-            // {
-            // id: "terra-luna",
-            // symbol: "luna",
-            // name: "Terra",
-            // notificationSent: false,
-            // },
-            {
-                id: "monero",
-                symbol: "xmr",
-                name: "Monero",
-                notificationSent: false
-            }, {
-                id: "enjincoin",
-                symbol: "enj",
-                name: "Enjin Coin",
-                notificationSent: false
-            }, {
-                id: "polkadot",
-                symbol: "dot",
-                name: "Polkadot",
-                notificationSent: false
-            }, {
-                id: "decentraland",
-                symbol: "mana",
-                name: "Decentraland",
-                notificationSent: false
-            }, {
-                id: "gala",
-                symbol: "gala",
-                name: "Gala",
-                notificationSent: false
-            },
-            // {
-            //     id: "terra-luna",
-            //     symbol: "lunc",
-            //     name: "Terra Luna Classic",
-            //     notificationSent: false
-            // },
-            {
-                id: "internet-computer",
-                symbol: "icp",
-                name: "Internet Computer",
-                notificationSent: false
-            },
-            // {
-            // id: "osmosis",
-            // symbol: "osmo",
-            // name: "Osmosis",
-            // notificationSent: false,
-            // },
-            {
-                id: "crypto-com-chain",
-                symbol: "cro",
-                name: "Cronos",
-                notificationSent: false
-            }, {
-                id: "matic-network",
-                symbol: "matic",
-                name: "Polygon",
-                notificationSent: false
 
-            },
-        ];
+        for (let i: number = 0; i < tokens.length; ++i)
+            this._tokens.push();
+    //     this._tokens = [
+    //         {
+    //             id: "ethereum",
+    //             symbol: "eth",
+    //             name: "Ethereum",
+    //             notificationSent: false
+    //         },
+    //         {
+    //             id: "bitcoin",
+    //             symbol: "btc",
+    //             name: "Bitcoin",
+    //             notificationSent: false
+    //         },
+    //         {
+    //             id: "solana",
+    //             symbol: "sol",
+    //             name: "Solana",
+    //             notificationSent: false
+    //         },
+    //         {
+    //             id: "cardano",
+    //             symbol: "ada",
+    //             name: "Cardano",
+    //             notificationSent: false
+    //         }, {
+    //             id: "dogecoin",
+    //             symbol: "doge",
+    //             name: "Dogecoin",
+    //             notificationSent: false
+    //         }, {
+    //             id: "ripple",
+    //             symbol: "xrp",
+    //             name: "XRP",
+    //             notificationSent: false
+    //         }, {
+    //             id: "fantom",
+    //             symbol: "ftm",
+    //             name: "Fantom",
+    //             notificationSent: false
+    //         },
+    //         // {
+    //         // id: "axie-infinity",
+    //         // symbol: "axs",
+    //         // name: "Axie Infinity",
+    //         // notificationSent: false,
+    //         // },
+    //         // {
+    //         // id: "shiba-inu",
+    //         // symbol: "shib",
+    //         // name: "Shiba Inu",
+    //         // notificationSent: false,
+    //         // },
+    //         {
+    //             id: "coti",
+    //             symbol: "coti",
+    //             name: "COTI",
+    //             notificationSent: false
+    //         },
+    //         // {
+    //         // id: "terra-luna",
+    //         // symbol: "luna",
+    //         // name: "Terra",
+    //         // notificationSent: false,
+    //         // },
+    //         {
+    //             id: "monero",
+    //             symbol: "xmr",
+    //             name: "Monero",
+    //             notificationSent: false
+    //         }, {
+    //             id: "enjincoin",
+    //             symbol: "enj",
+    //             name: "Enjin Coin",
+    //             notificationSent: false
+    //         }, {
+    //             id: "polkadot",
+    //             symbol: "dot",
+    //             name: "Polkadot",
+    //             notificationSent: false
+    //         }, {
+    //             id: "decentraland",
+    //             symbol: "mana",
+    //             name: "Decentraland",
+    //             notificationSent: false
+    //         }, {
+    //             id: "gala",
+    //             symbol: "gala",
+    //             name: "Gala",
+    //             notificationSent: false
+    //         },
+    //         // {
+    //         //     id: "terra-luna",
+    //         //     symbol: "lunc",
+    //         //     name: "Terra Luna Classic",
+    //         //     notificationSent: false
+    //         // },
+    //         {
+    //             id: "internet-computer",
+    //             symbol: "icp",
+    //             name: "Internet Computer",
+    //             notificationSent: false
+    //         },
+    //         // {
+    //         // id: "osmosis",
+    //         // symbol: "osmo",
+    //         // name: "Osmosis",
+    //         // notificationSent: false,
+    //         // },
+    //         {
+    //             id: "crypto-com-chain",
+    //             symbol: "cro",
+    //             name: "Cronos",
+    //             notificationSent: false
+    //         }, {
+    //             id: "matic-network",
+    //             symbol: "matic",
+    //             name: "Polygon",
+    //             notificationSent: false
+
+    //         },
+    //     ];
     }
+        
     /**
    * Run
    */
@@ -167,156 +170,159 @@ export default class Checker {
             console.log("--------------");
 
             // Loop symbols
-            for (let token of this.Tokens) {
+            for (let token of tokens) {
                 internet({ // Provide maximum execution time for the verification
                     timeout: 500,
                     // If it tries 5 times and it fails, then it will throw no internet
                     retries: 1
                 }).then(async () => {
+
+                    
+
                     // Get the information about them#
-
+                    
                     // get highest value within the last 7 days
-                    try {
-                        let pourcentLowWick: Number;
-                        await fetch(`https://api.coingecko.com/api/v3/coins/${
-                            token.id
-                        }/ohlc?vs_currency=usd&days=30`).then(async (res) => {
-                            await res.json().then(async (body) => { // Get all the closes
-                                let closes: number[] = [];
+                    //try {
+                    //    let pourcentLowWick: Number;
+                    //     await fetch(`https://api.coingecko.com/api/v3/coins/${
+                    //         token.id
+                    //     }/ohlc?vs_currency=usd&days=30`).then(async (res) => {
+                    //         await res.json().then(async (body) => { // Get all the closes
+                    //             let closes: number[] = [];
 
-                                try {
-                                    body?.forEach((allVal : number[]) => {
-                                        closes.push(allVal[4]);
-                                    });
-                                } catch (error) {
-                                    console.warn(error);
-                                    console.log(body);
-                                    if (body.status.error_code === 429) {
-                                        console.warn("Limit reached");
-                                        return;
-                                    }
-                                }
+                    //             try {
+                    //                 body?.forEach((allVal : number[]) => {
+                    //                     closes.push(allVal[4]);
+                    //                 });
+                    //             } catch (error) {
+                    //                 console.warn(error);
+                    //                 console.log(body);
+                    //                 if (body.status.error_code === 429) {
+                    //                     console.warn("Limit reached");
+                    //                     return;
+                    //                 }
+                    //             }
 
-                                // Get RSI
-                                const rsi = math.CalculateRSI(closes);
+                    //             // Get RSI
+                    //             const rsi = math.CalculateRSI(closes);
 
-                                let latest = body[0];
+                    //             let latest = body[0];
 
-                                // Close
-                                let c: number = latest[4];
-                                // Low
-                                let l: number = latest[3];
-                                // Open
-                                let o: number = latest[1];
-                                let lc = o - l;
+                    //             // Close
+                    //             let c: number = latest[4];
+                    //             // Low
+                    //             let l: number = latest[3];
+                    //             // Open
+                    //             let o: number = latest[1];
+                    //             let lc = o - l;
 
-                                // avoid 0 division
-                                if (lc == 0) 
-                                    pourcentLowWick = 0;
-                                 else 
-                                    pourcentLowWick = ((c - l) / lc) * 100;
+                    //             // avoid 0 division
+                    //             if (lc == 0) 
+                    //                 pourcentLowWick = 0;
+                    //              else 
+                    //                 pourcentLowWick = ((c - l) / lc) * 100;
                                 
 
 
-                                // console.log(c);
-                                // console.log(c - l);
-                                // console.log(lc);
-                                // console.log((c - l) / lc);
+                    //             // console.log(c);
+                    //             // console.log(c - l);
+                    //             // console.log(lc);
+                    //             // console.log((c - l) / lc);
 
-                                await fetch(`https://api.coingecko.com/api/v3/coins/${
-                                    token.id
-                                }/market_chart?vs_currency=usd&days=14`).then(async (res) => {
-                                    await res.json().then(async (body) => {
+                    //             await fetch(`https://api.coingecko.com/api/v3/coins/${
+                    //                 token.id
+                    //             }/market_chart?vs_currency=usd&days=14`).then(async (res) => {
+                    //                 await res.json().then(async (body) => {
 
-                                        if (typeof body === 'undefined' && body === null)
-                                            return;
-                                        let allPrices: number[] = [];
-                                        for (const key of body?. prices) {
-                                            allPrices.push(key[1]);
-                                        }
+                    //                     if (typeof body === 'undefined' && body === null)
+                    //                         return;
+                    //                     let allPrices: number[] = [];
+                    //                     for (const key of body?. prices) {
+                    //                         allPrices.push(key[1]);
+                    //                     }
 
-                                        let maxObj = allPrices.reduce(function (accumulatedValue: number, currentValue: number) {
-                                            return Math.max(accumulatedValue, currentValue);
-                                        });
+                    //                     let maxObj = allPrices.reduce(function (accumulatedValue: number, currentValue: number) {
+                    //                         return Math.max(accumulatedValue, currentValue);
+                    //                     });
 
-                                        let currPrice = allPrices[allPrices.length - 1];
-                                        let percentDown = ((maxObj - currPrice) / maxObj) * 100;
-                                        let goodBuy = rsi<= 35;
-                                        let badBuy = rsi >= 50;
-                                        let goodSell = rsi > 60;
-                                        let Suggestion = `${
-                                            badBuy ? "Worst time to buy" : goodBuy ? "best time to buy" : "You can buy"
-                                        }${
-                                            goodSell ? ", Best time to sell" : ""
-                                        }`;
-                                        console.log("--------------");
-                                        console.log(token.name);
-                                        console.log(`Max: ${maxObj}`);
-                                        console.log(`Current: ${currPrice}`);
-                                        console.log(`Down: ${
-                                            percentDown.toFixed(2)
-                                        }%`);
-                                        console.log(`Buy signal: ${goodBuy}`);
-                                        console.log(`Sell signal: ${goodSell}`);
-                                        console.log(`RSI: ${rsi}`);
+                    //                     let currPrice = allPrices[allPrices.length - 1];
+                    //                     let percentDown = ((maxObj - currPrice) / maxObj) * 100;
+                    //                     let goodBuy = rsi<= 35;
+                    //                     let badBuy = rsi >= 50;
+                    //                     let goodSell = rsi > 60;
+                    //                     let Suggestion = `${
+                    //                         badBuy ? "Worst time to buy" : goodBuy ? "best time to buy" : "You can buy"
+                    //                     }${
+                    //                         goodSell ? ", Best time to sell" : ""
+                    //                     }`;
+                    //                     console.log("--------------");
+                    //                     console.log(token.name);
+                    //                     console.log(`Max: ${maxObj}`);
+                    //                     console.log(`Current: ${currPrice}`);
+                    //                     console.log(`Down: ${
+                    //                         percentDown.toFixed(2)
+                    //                     }%`);
+                    //                     console.log(`Buy signal: ${goodBuy}`);
+                    //                     console.log(`Sell signal: ${goodSell}`);
+                    //                     console.log(`RSI: ${rsi}`);
 
-                                        console.log(`Suggestion: ${Suggestion}`);
+                    //                     console.log(`Suggestion: ${Suggestion}`);
 
-                                        // Get token index
-                                        const tokenIndex = this.Tokens.indexOf(token);
+                    //                     // Get token index
+                    //                     const tokenIndex = this.Tokens.indexOf(token);
 
-                                        if (token.notificationSent) { // Note: redendant on perpuse
-                                            if (! goodBuy && ! goodSell) {
-                                                this.Tokens[tokenIndex] = {
-                                                    id: token.id,
-                                                    name: token.name,
-                                                    symbol: token.symbol,
-                                                    notificationSent: false
+                    //                     if (token.notificationSent) { // Note: redendant on perpuse
+                    //                         if (! goodBuy && ! goodSell) {
+                    //                             this.Tokens[tokenIndex] = {
+                    //                                 id: token.id,
+                    //                                 name: token.name,
+                    //                                 symbol: token.symbol,
+                    //                                 notificationSent: false
 
-                                                };
-                                                // token.notificationSent = false;
-                                            }
+                    //                             };
+                    //                             // token.notificationSent = false;
+                    //                         }
 
-                                            return;
-                                        }
+                    //                         return;
+                    //                     }
 
-                                        if (goodBuy) { // Send notification if it's a goodbuy
-                                            this.SendNotification(`Buy alert: ${
-                                                token.name
-                                            }!!!`, `${
-                                                token.name
-                                            } is currently a good buy at $${currPrice}.`);
-                                            this.Tokens[tokenIndex] = {
-                                                id: token.id,
-                                                name: token.name,
-                                                symbol: token.symbol,
-                                                notificationSent: true
+                    //                     if (goodBuy) { // Send notification if it's a goodbuy
+                    //                         this.SendNotification(`Buy alert: ${
+                    //                             token.name
+                    //                         }!!!`, `${
+                    //                             token.name
+                    //                         } is currently a good buy at $${currPrice}.`);
+                    //                         this.Tokens[tokenIndex] = {
+                    //                             id: token.id,
+                    //                             name: token.name,
+                    //                             symbol: token.symbol,
+                    //                             notificationSent: true
 
-                                            };
-                                        }
-                                        if (goodSell) { // Send notification if it's a goodsell
-                                            this.SendNotification(`Sell alert: ${
-                                                token.name
-                                            }!!!`, `If you want to sell ${
-                                                token.name
-                                            } now is the time at $${currPrice}.`);
-                                            this.Tokens[tokenIndex] = {
-                                                id: token.id,
-                                                name: token.name,
-                                                symbol: token.symbol,
-                                                notificationSent: true
+                    //                         };
+                    //                     }
+                    //                     if (goodSell) { // Send notification if it's a goodsell
+                    //                         this.SendNotification(`Sell alert: ${
+                    //                             token.name
+                    //                         }!!!`, `If you want to sell ${
+                    //                             token.name
+                    //                         } now is the time at $${currPrice}.`);
+                    //                         this.Tokens[tokenIndex] = {
+                    //                             id: token.id,
+                    //                             name: token.name,
+                    //                             symbol: token.symbol,
+                    //                             notificationSent: true
 
-                                            };
-                                        }
-                                    }).catch((err) => {
-                                        console.log(err);
-                                    });
-                                });
-                            });
-                        });
-                    } catch (error) { // if error connection to coin gecko
-                        console.log(error);
-                    }
+                    //                         };
+                    //                     }
+                    //                 }).catch((err) => {
+                    //                     console.log(err);
+                    //                 });
+                    //             });
+                    //         });
+                    //     });
+                    // } catch (error) { // if error connection to coin gecko
+                    //     console.log(error);
+                    // }
                 }).catch(() => {
                     console.log("No internet");
                 });
