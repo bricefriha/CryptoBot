@@ -4,9 +4,10 @@ export default class Token {
   name: string = "";
   notificationSent: boolean = false;
 
-  // constructor(params) {
-  //     this.id = params.id;
-  //     this.symbol = params.symbol;
-  //     this.name = params.name;
-  // }
+  constructor(params : Token) {
+      this.id = params.id;
+      this.symbol = params.symbol;
+      this.name = params.name;
+      this.notificationSent = params.notificationSent;
+  }
 }

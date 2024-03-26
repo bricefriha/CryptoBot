@@ -34,7 +34,12 @@ export default class Checker {
         // All the crypto symbols that need to be checked
 
         for (let i: number = 0; i < tokens.length; ++i)
-            this._tokens.push(tokens[i]);
+            this._tokens.push(new Token({
+                                id: tokens[i].id,
+                                symbol: tokens[i].symbol,
+                                name: tokens[i].name,
+                                notificationSent: false 
+                            }));
     }
         
     /**
@@ -50,18 +55,23 @@ export default class Checker {
             console.log("--------------");
 
             // Loop symbols
-            for (let token of tokens) {
+            for (let token of this._tokens) {
                 internet({ // Provide maximum execution time for the verification
                     timeout: 500,
                     // If it tries 5 times and it fails, then it will throw no internet
                     retries: 1
                 }).then(async () => {
-
+                    const tokenIndex = this.Tokens.indexOf(token);
                     let closes: number[] = [];
                     
                     // Get the history of the token
                     const values = await CoinsProcess.GetHistory(token.id);
                     
+                    if (!values) {
+                        console.log("-----");
+                        console.log(`${token.name} not found`);
+                        return;
+                    }
                     // Get all closes
                     for (let i: number = 0; i < values.length; ++i){
                         closes.push(+values[i].priceUsd)
@@ -69,10 +79,49 @@ export default class Checker {
                     // Get RSI
                     const rsi = math.CalculateRSI(closes);
 
+                    // Get the current price
+                    const currPrice = values[0];
+                    
                     console.log("-----");
                     console.log(`${token.name}: ${rsi}`);
+                    let goodBuy = rsi<= 35;
+                    let badBuy = rsi >= 50;
+                    let goodSell = rsi > 60;
+                    const Suggestion = `${
+                        badBuy ? "Worst time to buy" : goodBuy ? "best time to buy" : "You can buy"
+                    }${
+                        goodSell ? ", Best time to sell" : ""
+                    }`;
+                    console.log(Suggestion);
 
+                  if (goodBuy) { // Send notification if it's a goodbuy
+                      this.SendNotification(`Buy alert: ${
+                          token.name
+                      }!!!`, `${
+                          token.name
+                      } is currently a good buy at $${currPrice}.`);
+                      this.Tokens[tokenIndex] = {
+                          id: token.id,
+                          name: token.name,
+                          symbol: token.symbol,
+                          notificationSent: true
 
+                      };
+                  }
+                  if (goodSell) { // Send notification if it's a goodsell
+                      this.SendNotification(`Sell alert: ${
+                          token.name
+                      }!!!`, `If you want to sell ${
+                          token.name
+                      } now is the time at $${currPrice}.`);
+                      this.Tokens[tokenIndex] = {
+                          id: token.id,
+                          name: token.name,
+                          symbol: token.symbol,
+                          notificationSent: true
+
+                      };
+                  }
                     // Get the information about them#
                     
                     // get highest value within the last 7 days
