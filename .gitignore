@@ -102,3 +102,4 @@ tests/cases/user/prettier/prettier
 # Added
 Program.js
 firebase.json
+src/config/config.json

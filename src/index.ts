@@ -1,6 +1,6 @@
 import test from "./testclass";
 import fetch from "node-fetch";
-import Checker from "./controllers/Checker";
+import Checker from "./controllers/checker";
 //console.log(test.sayHello());
 
 // const socket = dnsSocket();
