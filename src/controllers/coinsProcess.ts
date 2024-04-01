@@ -48,7 +48,7 @@ export default class CoinsProcess {
                     try {
 
                         const responseBody: AssetsResponse = await res.json(); 
-                        const token = responseBody.data.find(t => t.symbol == symbol);
+                        const token = responseBody.data.find(t => t.symbol === symbol);
                         if (token)
                             tokenId = token.id;
                     } catch (err) {
