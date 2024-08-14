@@ -1,6 +1,7 @@
 
-import fetch from "node-fetch";
-import config from '../config/config.json';
+import fetch, {Error, Response} from "node-fetch";
+// import config
+const config = JSON.parse(Deno.readTextFileSync(`${Deno.cwd()}/src/config/config.json`));
 type Token = {
     id: string,
     rank: string,
@@ -44,7 +45,7 @@ export default class CoinsProcess {
         if (symbol)
             // Request all
             await fetch(`${config.coincap_host}/v2/assets`)
-                .then(async (res) => {
+                .then(async (res : Response) => {
                     try {
 
                         const responseBody: AssetsResponse = await res.json(); 
@@ -58,7 +59,7 @@ export default class CoinsProcess {
                     }
                 }
             ).
-                catch(err => {
+                catch((err : Error) => {
                     console.error(err);
                     return null;
                 })
@@ -79,7 +80,7 @@ export default class CoinsProcess {
             const dateStart = new Date(new Date().getTime() - (14 * 24 * 60 * 60 * 1000));
             // Request all
             await fetch(`${config.coincap_host}/v2/assets/${tokenId}/history?interval=h1&start=${dateStart.getTime()}&end=${new Date().getTime()}`)
-                .then(async (res) => {
+                .then(async (res: Response) => {
                     try {
 
                         const responseBody: PriceResponse = await res.json();
@@ -91,7 +92,7 @@ export default class CoinsProcess {
                     }
                 }
                 ).
-                catch(err => {
+                catch((err : Error) => {
                     console.error(err);
                     return null;
                 });

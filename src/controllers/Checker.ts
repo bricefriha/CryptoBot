@@ -1,27 +1,17 @@
-import Token from "../Models/Token";
+import Token from "../models/token.ts";
 import fetch from "node-fetch";
 import {google} from "googleapis";
-import key from "../placeholders/firebase.json";
-import tokens from '../placeholders/tokens.json';
-// @ts-ignore
-import internet from "../Utility/internet";
-import math from "../Utility/Math";
-import {number, string} from "yargs";
-import CoinsProcess from "./coinsProcess";
-
-const PROJECT_ID = "<YOUR-PROJECT-ID>";
+const key = JSON.parse(Deno.readTextFileSync(`${Deno.cwd()}/src/placeholders/firebase.json`));
+const tokens = JSON.parse(Deno.readTextFileSync(`${Deno.cwd()}/src/placeholders/tokens.json`));
+import internet from "../utility/internet.ts";
+import math from "../utility/math.ts";
+import CoinsProcess from "./coinsProcess.ts";
 const HOST = "fcm.googleapis.com";
-const PATH = "/v1/projects/" + PROJECT_ID + "/messages:send";
 const MESSAGING_SCOPE = "https://www.googleapis.com/auth/firebase.messaging";
 const SCOPES = [MESSAGING_SCOPE];
 
 export default class Checker {
-    // List or all the crypto symbols that need to be checked
-    // private _symbols: Array<string>;
-    // public get Symbols(): Array<string> {
-    //     return this._symbols;
-    // }
-    private _interval : NodeJS.Timer;
+    private _interval ;
     private _tokens : Token[];
     public get Tokens(): Token[]{
         return this._tokens;

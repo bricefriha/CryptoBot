@@ -103,3 +103,4 @@ tests/cases/user/prettier/prettier
 Program.js
 firebase.json
 src/config/config.json
+deno.lock
