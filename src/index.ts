@@ -1,5 +1,5 @@
 
-import Checker from "./controllers/checker.ts";
+import Checker from "./controllers/Checker.ts";
 const checker = new Checker();
 
 checker.Run();
