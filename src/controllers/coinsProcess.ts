@@ -1,5 +1,5 @@
 
-import fetch, {Error, Response} from "node-fetch";
+import fetch, {Error, Response} from "npm:node-fetch@2.6.6";
 // import config
 const config = JSON.parse(Deno.readTextFileSync(`${Deno.cwd()}/src/config/config.json`));
 type Token = {

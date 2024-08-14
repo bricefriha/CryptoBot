@@ -1,5 +1,5 @@
 import internetSettings from "../models/internetSettings.ts";
-import dns, {Response} from "dns-socket";
+import dns, {Response} from "npm:dns-socket@4.2.2";
 /**
  * Internet available is a very simple method that allows you to check if there's an active
  * internet connection by resolving a DNS address and it's developer friendly.

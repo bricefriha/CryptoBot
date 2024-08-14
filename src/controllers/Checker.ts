@@ -1,6 +1,6 @@
 import Token from "../Models/Token.ts";
-import fetch, {Response, Error} from "node-fetch";
-import {google} from "googleapis";
+import fetch, {Response, Error} from "npm:node-fetch@2.6.6";
+import {google} from "npm:googleapis@92.0.0";
 const key = JSON.parse(Deno.readTextFileSync(`${Deno.cwd()}/src/placeholders/firebase.json`));
 const tokens = JSON.parse(Deno.readTextFileSync(`${Deno.cwd()}/src/placeholders/tokens.json`));
 import internet from "../Utility/Internet.ts";
