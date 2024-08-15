@@ -5,15 +5,14 @@ export default class MathC {
    * @returns all the ups
    */
   private static CalculateUps(closes: number[]): number[] {
-    let result: number[] = [];
-    let lastClose: number;
+    const result: number[] = [];
 
     closes.forEach((close) => {
-      let index = closes.indexOf(close);
+      const index = closes.indexOf(close);
       if (index === 0) return;
 
       // Result of the calculation
-      let res = closes[index] - closes[index - 1];
+      const res = closes[index] - closes[index - 1];
 
       // Up=0 if the result is negative
       result.push(res < 0 ? 0 : res);
@@ -26,15 +25,14 @@ export default class MathC {
    * @returns all the Downs
    */
   private static CalculateDowns(closes: number[]): number[] {
-    let result: number[] = [];
-    let lastClose: number;
+    const result: number[] = [];
 
     closes.forEach((close) => {
-      let index = closes.indexOf(close);
+      const index = closes.indexOf(close);
       if (index === 0) return;
 
       // Result of the calculation
-      let res = closes[index] - closes[index - 1];
+      const res = closes[index] - closes[index - 1];
 
       // down=0 if the result is negative
       result.push(res > 0 ? 0 : Math.abs(res));
@@ -60,13 +58,6 @@ export default class MathC {
    */
   public static CalculateRSI(closePrices: number[]): number {
     // // Calculate RS
-    // const rs: number =
-    //   MathC.calculateAverage(MathC.CalculateUps(closes)) /
-    //   MathC.calculateAverage(MathC.CalculateDowns(closes));
-  
-    // //
-    // let t = 100 / (1 + rs);
-    // return Math.round(100 - t);
     const period = 14;
     const changes = [];
     for (let i = 1; i < closePrices.length; i++) {

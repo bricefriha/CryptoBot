@@ -1,6 +1,5 @@
-import internetSettings from "../Models/internetSettings";
-// @ts-ignore
-import dsn from "dns-socket";
+import internetSettings from "../models/internetSettings.ts";
+import dns, {Response} from "npm:dns-socket@4.2.2";
 /**
  * Internet available is a very simple method that allows you to check if there's an active
  * internet connection by resolving a DNS address and it's developer friendly.
@@ -14,12 +13,11 @@ import dsn from "dns-socket";
  */
 function internetAvailable(settings: internetSettings) {
   // Require dns-socket module from dependencies
-  var dns = require("dns-socket");
   settings = settings || {};
 
   return new Promise(function (resolve, reject) {
     // Create instance of the DNS resolver
-    var socket = dns({
+    const socket = dns({
       timeout: settings.timeout || 5000,
       retries: settings.retries || 5,
     });
@@ -40,7 +38,7 @@ function internetAvailable(settings: internetSettings) {
 
     // DNS Address solved, internet available
     socket.on("response", () => {
-      socket.destroy((res: any) => {
+      socket.destroy((res: Response) => {
         resolve(res);
       });
     });
@@ -54,4 +52,4 @@ function internetAvailable(settings: internetSettings) {
   });
 }
 
-module.exports = internetAvailable;
+export default internetAvailable;
